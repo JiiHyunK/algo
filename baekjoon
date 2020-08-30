@@ -1,1 +1,78 @@
 
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+string answer;
+stack<string> s1;  //이어주는 대상
+stack<string> s2; //곱셈 담아
+
+void recur(string words){
+    while(!s2.empty()){  //s1이 empty이지 않을때까지
+        if(s2.top()=="-"){
+            s2.pop();
+        }else if(s2.top() == "\0"){ //끝까지 다 돈것이므로
+            s2.pop();
+            for(int i=0; i<s2.top().c_str()[0]-'0'; i++)
+                answer.insert(0, s1.top());
+            s1.pop();
+            string temp = s1.top();
+            s1.pop(); s2.pop();
+            s1.push(temp+=answer);
+            return;
+        }
+            
+        for(int i=0; i<words.length(); i++){
+            if(words[i]=='(' || words[i]==')'){
+                string a;
+                
+                if(words[i]=='('){
+                    a = words.substr(0,i);  //1,2 전부 넣은것
+                    s1.push(a.substr(0,i-1));  //앞에 붙여줄 애들
+                    s2.push(a.substr(i-1));  //'(' 바로 전꺼는 곱해줄 대상
+                }else if(words[i]== ')'){  //맨뒤
+                    a = words.substr(0,i);
+                    s1.push(a);
+                    s2.push("\0");
+                    break;
+                }
+
+
+                string b = words.substr(i+1);
+                recur(b);
+                answer = "";
+                if(s2.empty()){
+                    answer.insert(0, s1.top());
+                    return;
+                }
+                for(int i=0; i<s2.top().c_str()[0]-'0'; i++){
+                    answer.insert(0, s1.top());
+                }
+                
+                s1.pop();
+                string temp = s1.top();
+                s1.pop(); s2.pop();
+                s1.push(temp+=answer);
+                return;
+            }
+        }
+    }
+}
+
+int main() {
+
+    ios_base::sync_with_stdio(0);cout.tie(NULL);cin.tie(NULL);
+
+    string words;
+    cin>> words;
+    
+    s2.push("-");
+    recur(words);
+    cout<<answer.size();
+
+    return 0;
+}
+
+//9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(9(111))))))))))))))))))))))))
