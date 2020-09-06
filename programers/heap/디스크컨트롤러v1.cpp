@@ -45,18 +45,18 @@ void solution(vector<vector<int>> jobs) {
 
         }
 
-        
-        if(!working){
+        if (!working && !pq.empty()) //not empty일시 추가함
+        {
             /*여기서 pq해줘야함*/
             
-            if(pq.top().second<=t&&!pq.empty()){ //현재시각 보다 작거나 같다면 실행 가능  //not empty일시 추가함
+            if(pq.top().second<=t){ //현재시각 보다 작거나 같다면 실행 가능 
                 st = t;
                 et = pq.top().first; at = pq.top().second;
                 working = true;
                 pq.pop();
             }
         }
-        
+
         t++;  //시간이 1초씩 증가한다.
     }
     
